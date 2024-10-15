@@ -20,6 +20,18 @@ def main():
 
     # Instantiate the Player object
     player = Player(x, y)
+    
+    # Add the groups
+    updatable = pygame.sprite.Group()
+    drawable = pygame.sprite.Group()
+    
+    # Add the player to the groups
+    updatable.add(player)
+    drawable.add(player)
+
+    # Debug print statements
+    print(f"Updatable group has {len(updatable)} sprites")
+    print(f"Drawable group has {len(drawable)} sprites")
 
     # Game loop
     running = True
@@ -29,12 +41,20 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
 
-        # Clear the screen, draw stuff, update display
+        # Clear the screen
         screen.fill((0,0,0)) # Fill GUI with black
-        player.update(dt)
-        player.draw(screen)
+
+        # Update all sprites
+        for sprite in updatable:
+             sprite.update(dt)
+    
+        # Draw all sprites
+        for sprite in drawable:
+            sprite.draw(screen)
+
+        # Update display
         pygame.display.flip()
-        
+
         # Set framerate (60 fps)
         dt = clock.tick(60) / 1000
 
