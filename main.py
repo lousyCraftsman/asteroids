@@ -1,5 +1,7 @@
 from constants import *
 from player import *
+from asteroid import *
+from asteroidfield import *
 import pygame
 
 def main():
@@ -22,12 +24,22 @@ def main():
     player = Player(x, y)
     
     # Add the groups
+    asteroids = pygame.sprite.Group()
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
+
+    # Assign containers to the Asteroid class
+    Asteroid.containers = (asteroids, updatable, drawable)
+
+    # Assign container to the AsteroidField class
+    AsteroidField.containers = (updatable,)  # tuple
     
     # Add the player to the groups
     updatable.add(player)
     drawable.add(player)
+
+    # Create the AsteroidField
+    asteroid_field = AsteroidField()
 
     # Debug print statements
     print(f"Updatable group has {len(updatable)} sprites")
