@@ -2,6 +2,7 @@ from constants import *
 from player import *
 from asteroid import *
 from asteroidfield import *
+from shot import *
 import pygame
 
 def main():
@@ -24,12 +25,16 @@ def main():
     player = Player(x, y)
     
     # Add the groups
+    shots = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
 
     # Assign containers to the Asteroid class
     Asteroid.containers = (asteroids, updatable, drawable)
+
+    # Assign containers to the Shot class
+    Shot.containers = (shots, updatable, drawable)
 
     # Assign container to the AsteroidField class
     AsteroidField.containers = (updatable,)  # tuple
@@ -58,9 +63,15 @@ def main():
 
         # Update all sprites
         for sprite in updatable:
-             sprite.update(dt)
+            if sprite == player:
+                new_shot = sprite.update(dt)
+                if new_shot:
+                    shots.add(new_shot)
+                    updatable.add(new_shot)
+                    drawable.add(new_shot)
+            else: 
+                sprite.update(dt)
 
-        
         for asteroid in asteroids:
             if player.collision(asteroid):
                 print ("Game over!")
