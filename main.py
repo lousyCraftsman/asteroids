@@ -71,11 +71,18 @@ def main():
                     drawable.add(new_shot)
             else: 
                 sprite.update(dt)
-
+        # Collision checks
         for asteroid in asteroids:
             if player.collision(asteroid):
                 print ("Game over!")
                 running = False
+
+        for asteroid in asteroids:
+            for shot in shots:
+                if shot.collision(asteroid):
+                    shot.kill()
+                    asteroid.kill()
+                
     
         # Draw all sprites
         for sprite in drawable:
