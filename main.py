@@ -1,9 +1,9 @@
-from constants import *
-from player import *
-from asteroid import *
-from asteroidfield import *
-from shot import *
 import pygame
+from constants import *
+from player import Player
+from asteroid import Asteroid
+from asteroidfield import AsteroidField
+from shot import Shot
 
 def main():
     # Startup information
@@ -30,21 +30,17 @@ def main():
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
 
-    # Assign containers to the Asteroid class
+    # Assign containers to classes
     Asteroid.containers = (asteroids, updatable, drawable)
-
-    # Assign containers to the Shot class
     Shot.containers = (shots, updatable, drawable)
-
-    # Assign container to the AsteroidField class
     AsteroidField.containers = (updatable,)  # tuple
+
+    # Create the AsteroidField
+    asteroid_field = AsteroidField()
     
     # Add the player to the groups
     updatable.add(player)
     drawable.add(player)
-
-    # Create the AsteroidField
-    asteroid_field = AsteroidField()
 
     # Debug print statements
     print(f"Updatable group has {len(updatable)} sprites")
@@ -71,6 +67,7 @@ def main():
                     drawable.add(new_shot)
             else: 
                 sprite.update(dt)
+
         # Collision checks
         for asteroid in asteroids:
             if player.collision(asteroid):
@@ -81,8 +78,7 @@ def main():
             for shot in shots:
                 if shot.collision(asteroid):
                     shot.kill()
-                    asteroid.kill()
-                
+                    asteroid.split()
     
         # Draw all sprites
         for sprite in drawable:
