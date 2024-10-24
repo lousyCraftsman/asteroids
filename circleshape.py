@@ -1,4 +1,5 @@
 import pygame
+from constants import COLLISION_SENSITIVITY
 
 # Base class for game objects
 class CircleShape(pygame.sprite.Sprite):
@@ -21,4 +22,4 @@ class CircleShape(pygame.sprite.Sprite):
         pass
 
     def collision(self, other):
-        return self.position.distance_to(other.position) <= self.radius + other.radius
+        return self.position.distance_to(other.position) <= (self.radius + other.radius) * COLLISION_SENSITIVITY
